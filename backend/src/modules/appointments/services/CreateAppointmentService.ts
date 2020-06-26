@@ -1,7 +1,7 @@
-import Appointment from '../models/Appointments';
+import Appointment from '../infra/typeorm/entities/Appointments';
 import { getCustomRepository } from 'typeorm';
 
-import AppError from '../Errors/AppError';
+import AppError from '@shared/errors/AppError';
 
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
