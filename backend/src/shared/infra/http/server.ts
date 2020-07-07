@@ -1,5 +1,4 @@
 import app from './app';
-import 'reflect-metadata';
 import '../typeorm';
 
 app.listen(3333, () => {
