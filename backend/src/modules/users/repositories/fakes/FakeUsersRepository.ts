@@ -18,14 +18,10 @@ class UserRepository implements IUsersRepository {
     return findUser;
   }
 
-  public async create({
-    name,
-    email,
-    password,
-  }: ICreateUserDTO): Promise<User> {
+  public async create(userData: ICreateUserDTO): Promise<User> {
     const user = new User();
 
-    Object.assign(user, { id: uuid(), name, email, password });
+    Object.assign(user, { id: uuid() }, userData);
 
     this.users.push(user);
 
