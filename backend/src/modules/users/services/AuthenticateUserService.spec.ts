@@ -1,3 +1,4 @@
+import AppError from '../../../shared/errors/AppError';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import AuthenticateUserService from './AuthenticateUserService';
@@ -7,12 +8,12 @@ describe('Authenticate user', () => {
   it('Should be able to authenticate a user', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
     const fakeHashProvider = new FakeHashProvider();
-
-    const authenticateUser = new AuthenticateUserService(
+    const createUser = new CreateUserService(
       fakeUsersRepository,
       fakeHashProvider,
     );
-    const createUser = new CreateUserService(
+
+    const authenticateUser = new AuthenticateUserService(
       fakeUsersRepository,
       fakeHashProvider,
     );
@@ -30,5 +31,48 @@ describe('Authenticate user', () => {
 
     expect(response).toHaveProperty('token');
     expect(response.user).toEqual(user);
+  });
+  it('Should not be able to authenticate with an invalid password', async () => {
+    const fakeUsersRepository = new FakeUsersRepository();
+    const fakeHashProvider = new FakeHashProvider();
+    const createUser = new CreateUserService(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
+
+    const authenticateUser = new AuthenticateUserService(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
+
+    await createUser.execute({
+      name: 'Lucas Lima',
+      email: 'lucas.lima@test.com',
+      password: '12345678',
+    });
+
+    expect(
+      authenticateUser.execute({
+        email: 'lucas.lima@test.com',
+        password: 'invalidpass',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('Should not be able to authenticate with a nonexistent user', async () => {
+    const fakeUsersRepository = new FakeUsersRepository();
+    const fakeHashProvider = new FakeHashProvider();
+
+    const authenticateUser = new AuthenticateUserService(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
+
+    expect(
+      authenticateUser.execute({
+        email: 'nonexistent.user@test.com',
+        password: '1234567546548',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
   });
 });
