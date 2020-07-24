@@ -6,19 +6,19 @@ import FakeUserTokensRepository from '../repositories/fakes/FakeUserTokensReposi
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeMailProvider: FakeMailProvider;
-let faketokensRepository: FakeUserTokensRepository;
+let fakeTokensRepository: FakeUserTokensRepository;
 let sendForgotPasswordEmail: SendForgotPasswordEmailService;
 
 describe('SendForgotPasswordEmail', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeMailProvider = new FakeMailProvider();
-    faketokensRepository = new FakeUserTokensRepository();
+    fakeTokensRepository = new FakeUserTokensRepository();
 
     sendForgotPasswordEmail = new SendForgotPasswordEmailService(
       fakeUsersRepository,
       fakeMailProvider,
-      faketokensRepository,
+      fakeTokensRepository,
     );
   });
 
@@ -47,7 +47,7 @@ describe('SendForgotPasswordEmail', () => {
   });
 
   it('Should be able to generate a new forgot password token', async () => {
-    const generateToken = jest.spyOn(faketokensRepository, 'generate');
+    const generateToken = jest.spyOn(fakeTokensRepository, 'generate');
 
     const user = await fakeUsersRepository.create({
       name: 'Lucas Lima',

@@ -24,9 +24,7 @@ class CreateUserService {
   public async execute({ name, email, password }: IRequest): Promise<User> {
     const checkIfUserExists = await this.usersRepository.findByEmail(email);
 
-    if (checkIfUserExists) {
-      throw new AppError('Email adress already used');
-    }
+    if (checkIfUserExists) throw new AppError('Email adress already used');
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
@@ -35,8 +33,6 @@ class CreateUserService {
       email,
       password: hashedPassword,
     });
-
-    delete user.password;
 
     return user;
   }

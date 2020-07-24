@@ -32,18 +32,15 @@ class AuthenticateUserService {
   public async execute({ email, password }: IRequest): Promise<IResponse> {
     const user = await this.usersRepository.findByEmail(email);
 
-    if (!user) {
-      throw new AppError('Incorrect email/password combination', 401);
-    }
+    if (!user) throw new AppError('Incorrect email/password combination', 401);
 
     const passwordMatched = await this.hashProvider.compareHash(
       password,
       user.password,
     );
 
-    if (!passwordMatched) {
+    if (!passwordMatched)
       throw new AppError('Incorrect email/password combination', 401);
-    }
 
     const { secret, expiresIn } = authConfig.jwt;
 
@@ -51,8 +48,6 @@ class AuthenticateUserService {
       subject: user.id,
       expiresIn,
     });
-
-    delete user.password;
 
     return { user, token };
   }
