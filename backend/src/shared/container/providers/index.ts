@@ -19,7 +19,12 @@ container.registerSingleton<IMailTemplateProvider>(
   HandlebarsMailTemplateProvider,
 );
 
-container.registerInstance<IMailProvider>(
+container.registerSingleton<IMailProvider>(
   'MailProvider',
-  container.resolve(EtherealMailProvider),
+  EtherealMailProvider,
 );
+
+// container.registerInstance<IMailProvider>(
+//   'MailProvider',
+//   container.resolve(EtherealMailProvider),
+// ); Error : TypeInfo not found for EtherealMailProvider
