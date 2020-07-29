@@ -22,7 +22,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
     return findAppointment || undefined;
   }
 
-  public async FindAllInMonthFromProvider({
+  public async findAllInMonthFromProvider({
     provider_id,
     month,
     year,
