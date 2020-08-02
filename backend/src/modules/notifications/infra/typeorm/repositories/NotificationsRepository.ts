@@ -1,4 +1,5 @@
 import { getMongoRepository, MongoRepository } from 'typeorm';
+import { ObjectID } from 'mongodb';
 
 import ICreateNotificationDTO from '../../../dtos/ICreateNotificationDTO';
 import INotificationsRepository from '../../../repositories/INotificationsRepository';
@@ -16,7 +17,11 @@ class NotificationsRepository implements INotificationsRepository {
     content,
     recipient_id,
   }: ICreateNotificationDTO): Promise<Notification> {
-    const notification = this.ormRepository.create({ content, recipient_id });
+    const notification = this.ormRepository.create({
+      id: new ObjectID(),
+      content,
+      recipient_id,
+    });
 
     this.ormRepository.save(notification);
 
